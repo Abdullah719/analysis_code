@@ -1,0 +1,32 @@
+import folium
+import pandas as pd
+
+# Example data setup:
+data = {
+    'Latitude': [-37.8136, -37.8156, -37.8100, -37.8050, -37.8200],
+    'Longitude': [144.9631, 144.9600, 144.9700, 144.9500, 144.9550],
+    'Connections': [1, 2, 3, 4, 5]  # Example connections, this will need to be actual pairs of coordinates
+}
+df = pd.DataFrame(data)
+
+m = folium.Map(location=[-37.8136, 144.9631], zoom_start=13)
+
+# Add points
+for _, row in df.iterrows():
+    folium.CircleMarker(
+        location=[row['Latitude'], row['Longitude']],
+        radius=5,
+        color='blue',
+        fill=True,
+        fill_color='blue'
+    ).add_to(m)
+
+# Assuming 'Connections' contains indices of df for connected points
+for i in range(len(df)):
+    for j in range(i + 1, len(df)):
+        start_lat, start_lon = df.iloc[i]['Latitude'], df.iloc[i]['Longitude']
+        end_lat, end_lon = df.iloc[j]['Latitude'], df.iloc[j]['Longitude']
+        folium.PolyLine([(start_lat, start_lon), (end_lat, end_lon)], color="blue").add_to(m)
+
+# Save or display the map
+m.save('map.html')  # Saves the map as an HTML file you can open in a browser
