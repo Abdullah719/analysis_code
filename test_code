@@ -1,0 +1,33 @@
+import pandas as pd
+import numpy as np
+
+# Load the dataset
+data = pd.read_csv('path_to_your_data.csv')
+
+# Calculate forecast errors and metrics
+def calculate_errors(predictions, actuals):
+    errors = predictions - actuals
+    mae = np.mean(np.abs(errors))
+    rmse = np.sqrt(np.mean(errors**2))
+    return mae, rmse
+
+# Initialize a dictionary to store the results
+error_metrics = {}
+
+# List of forecasters
+forecasters = ['Westpac Forecast', 'Joe Bloggs Forecast', 'Harry Spent Forecast']
+
+# Calculate error metrics for each forecaster
+for forecaster in forecasters:
+    mae, rmse = calculate_errors(data[forecaster], data['Actual Change'])
+    error_metrics[forecaster] = {'MAE': mae, 'RMSE': rmse}
+
+# Output the results
+for forecaster, metrics in error_metrics.items():
+    print(f"Error metrics for {forecaster}:")
+    print(f"  Mean Absolute Error: {metrics['MAE']:.2f}")
+    print(f"  Root Mean Squared Error: {metrics['RMSE']:.2f}\n")
+
+# Checking for unusual values or formatting issues (optional)
+print("Data check (first 5 rows):")
+print(data.head())
